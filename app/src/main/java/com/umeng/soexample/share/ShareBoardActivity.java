@@ -13,6 +13,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMVideo;
 import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.ShareBoardConfig;
 import com.umeng.socialize.shareboard.SnsPlatform;
@@ -29,6 +30,7 @@ public class ShareBoardActivity extends BaseActivity {
 
     private UMShareListener mShareListener;
     private ShareAction mShareAction;
+    private ShareAction mVideoShareAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,33 @@ public class ShareBoardActivity extends BaseActivity {
                     }
                 }
             });
+        /*自定义按钮的分享面板2*/
+
+        mVideoShareAction = new ShareAction(ShareBoardActivity.this).setDisplayList(
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA)
+                .addButton("保存至相册", "复制文本", "umeng_socialize_copy", "umeng_socialize_copy")
+                .addButton("删除", "复制文本", "umeng_socialize_copy", "umeng_socialize_copy")
+                .setShareboardclickCallback(new ShareBoardlistener() {
+                    @Override
+                    public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+                        if (snsPlatform.mShowWord.equals("保存至相册")) {
+                            Toast.makeText(ShareBoardActivity.this, "保存至相册", Toast.LENGTH_LONG).show();
+                        } else if (snsPlatform.mShowWord.equals("删除")) {
+                            Toast.makeText(ShareBoardActivity.this, "删除", Toast.LENGTH_LONG).show();
+                        } else {
+                            UMWeb web = new UMWeb(Defaultcontent.url);
+                            web.setTitle("来自分享面板标题");
+                            web.setDescription("来自分享面板内容");
+                            web.setThumb(new UMImage(ShareBoardActivity.this, R.drawable.logo));
+                            new ShareAction(ShareBoardActivity.this).withMedia(web)
+                                    .setPlatform(share_media)
+                                    .setCallback(mShareListener)
+                                    .share();
+                        }
+                    }
+                });
+
+
         findViewById(R.id.shareboard_bottom_one).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +117,24 @@ public class ShareBoardActivity extends BaseActivity {
                 mShareAction.open(config);
             }
         });
+        findViewById(R.id.shareboard_bottom_three).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareBoardConfig config = new ShareBoardConfig();
+                config.setMenuItemBackgroundShape(ShareBoardConfig.BG_SHAPE_NONE);
+                mVideoShareAction.open(config);
+            }
+        });
+
+        findViewById(R.id.shareboard_bottom_two).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareBoardConfig config = new ShareBoardConfig();
+                config.setMenuItemBackgroundShape(ShareBoardConfig.BG_SHAPE_NONE);
+                mShareAction.open(config);
+            }
+        });
+
         findViewById(R.id.shareboard_center_one).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

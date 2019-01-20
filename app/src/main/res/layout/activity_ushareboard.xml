@@ -47,5 +47,12 @@
         app:umtitle="页面中部菜单-2"
         app:umicon="@drawable/um_menuc"
         android:layout_height="@dimen/item_height"/>
+    <com.umeng.soexample.views.Item
+        android:id="@+id/shareboard_bottom_three"
+        android:layout_width="match_parent"
+        android:layout_below="@id/shareboard_center_two"
+        app:umtitle="页面底部菜单-3"
+        app:umicon="@drawable/um_menud"
+        android:layout_height="@dimen/item_height"/>
 
 </RelativeLayout>
